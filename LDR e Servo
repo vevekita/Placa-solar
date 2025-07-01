@@ -1,0 +1,52 @@
+#include <Servo.h>
+
+#define ldr1 A0
+#define ldr2 A1
+#define ldr3 A2
+#define ldr4 A3
+
+int valorLdr1 = 0;
+int valorLdr2 = 0;
+int valorLdr3 = 0;
+int valorLdr4 = 0;
+
+Servo servoBase;
+Servo servoCima;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ldr1, INPUT);
+  pinMode(ldr2, INPUT);
+  pinMode(ldr3, INPUT);
+  pinMode(ldr4, INPUT);
+  servoBase.attach(9);
+  servoCima.attach(10);
+}
+
+void loop() {
+  valorLdr1 = analogRead(ldr1);
+  valorLdr2 = analogRead(ldr2);
+  valorLdr3 = analogRead(ldr3);
+  valorLdr4 = analogRead(ldr4);
+
+  if (valorLdr1 >= valorLdr2 && valorLdr1 >= valorLdr3 && valorLdr1 >= valorLdr4) {
+      servoBase.write(0);
+  }
+  else if (valorLdr2 > valorLdr1 && valorLdr2 >= valorLdr3 && valorLdr2 >= valorLdr4) {
+      servoBase.write(60);
+  }
+  else if (valorLdr3 > valorLdr1 && valorLdr3 > valorLdr2 && valorLdr3 >= valorLdr4) {
+      servoBase.write(120);
+  }
+  else if (valorLdr4 > valorLdr1 && valorLdr4 > valorLdr2 && valorLdr4 > valorLdr3) {
+      servoBase.write(180);
+  }
+
+  if ((valorLdr1 + valorLdr2) >= (valorLdr3 + valorLdr4)) {
+    servoCima.write(0);
+  } else {
+    servoCima.write(180);
+  }
+  
+  delay(100);
+}
